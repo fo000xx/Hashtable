@@ -1,0 +1,1 @@
+//todo: create a load of data to test with, fill the hashtable, find values, delete values, try to refind values.
