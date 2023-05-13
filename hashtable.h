@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <iostream>
 
 class HashNode{
 public:
@@ -28,9 +29,11 @@ public:
 
     int hashFunction(int key);
     std::string findValue(int key);
-    void insertKey(int key, std::string& data);
-    void deleteKey(int key);
+    std::string insertKey(int key, std::string& data);
+    std::string deleteKey(int key);
     int getCapacity() { return mTableCapacity; }
+    void printHashTable();
+    void printKeyValue(HashNode& node);
 
 private:
     std::vector<std::unique_ptr<HashNode>> mHashTable;
