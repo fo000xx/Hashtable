@@ -3,5 +3,20 @@
 
 int main()
 {
-    //todo: create a load of data to test with, fill the hashtable, find values, delete values, try to refind values.
+    HashTable tableTest{10};
+
+    std::string test { "test" };
+    std::string result{};
+    result = tableTest.insertKey(10, test);
+    std::cout << result << '\n';
+
+    result =  tableTest.insertKey(11, test);
+    std::cout << result << '\n';
+    
+    result = tableTest.findValue(10);
+    std::cout << result << '\n';
+    
+    tableTest.printHashTable();
+
+    return 0;
 }

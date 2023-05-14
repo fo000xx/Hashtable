@@ -33,11 +33,11 @@ public:
     std::string deleteKey(int key);
     int getCapacity() { return mTableCapacity; }
     void printHashTable();
-    void printKeyValue(HashNode& node);
 
 private:
     std::vector<std::unique_ptr<HashNode>> mHashTable;
     std::size_t mTableCapacity;
+    void printKeyValue(HashNode& node);
 };
 
 #endif

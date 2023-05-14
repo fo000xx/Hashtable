@@ -17,7 +17,7 @@ std::string HashTable::insertKey(int key, std::string& value)
         ++mTableCapacity;
     }
     else {
-        std::unique_ptr<HashNode> currentNode { node.get() };
+        HashNode* currentNode { node.get() };
         while (currentNode != nullptr) {
             if (currentNode->mKey == key) {
                 currentNode->mValue = value;
@@ -25,7 +25,7 @@ std::string HashTable::insertKey(int key, std::string& value)
                 userResponse = "Overwritten existing value\n";
                 return userResponse;
             }
-            currentNode = std::move(currentNode->mNextNode);
+            currentNode = currentNode->mNextNode.get();
         }
         std::unique_ptr<HashNode> newNode = std::make_unique<HashNode>(key, value);
         newNode->mNextNode = std::move(node);
@@ -42,12 +42,12 @@ std::string HashTable::findValue(int key)
     const std::unique_ptr<HashNode>& node { mHashTable[index] };
     std::string userResponse{};
 
-    std::unique_ptr<HashNode> currentNode { node.get() };
+    HashNode* currentNode { node.get() };
     while (currentNode != nullptr) {
         if (currentNode->mKey == key) {
             return currentNode->mValue;
         }
-        currentNode = std::move(currentNode->mNextNode);
+        currentNode = currentNode->mNextNode.get();
     }
     userResponse = "Key not found\n";
     return userResponse;
@@ -59,8 +59,8 @@ std::string HashTable::deleteKey(int key)
     std::unique_ptr<HashNode>& node { mHashTable[index] };
     std::string userResponse{};
 
-    std::unique_ptr<HashNode> currentNode { node.get() };
-    std::unique_ptr<HashNode> previousNode { nullptr };
+    HashNode* currentNode { node.get() };
+    HashNode* previousNode { nullptr };
 
     while (currentNode != nullptr) {
         if (currentNode->mKey == key) {
@@ -74,29 +74,34 @@ std::string HashTable::deleteKey(int key)
             userResponse = "Key/Value deleted\n";
             return userResponse;
         }
-        previousNode = std::move(currentNode);
-        currentNode = std::move(currentNode->mNextNode);
+        previousNode = currentNode;
+        currentNode = currentNode->mNextNode.get();
     }
     userResponse = "Key not found\n";
     return userResponse;
 }
 
-/*void HashTable::printKeyValue(HashNode& node)
+void HashTable::printKeyValue(HashNode& node)
 {
-    std
-}*/
+    std::cout << "Key: " << node.mKey << ". Value: " << node.mValue << '\n';
+}
 
 void HashTable::printHashTable()
 {
     std::cout << "Table Capacity: " << mTableCapacity << '\n';
 
-    //for (bucket : HashTable)
-    //go to bucket 1 in mHashTable, 
-    //if it has a key/value, print key + value
-        //while mNextNode != nullptr, 
-            //go to next node
-            //print key + value()
-        //if mNextNode == nullptr, 
-            //go to next bucket in hashtable
-
+    for (auto& bucket : mHashTable) {
+        if (bucket != nullptr) {
+            HashNode* currentNode { bucket.get() };            
+            while (currentNode != nullptr) {
+                printKeyValue(*currentNode);
+                if (currentNode->mNextNode != nullptr) {
+                    currentNode = currentNode->mNextNode.get();
+                }
+                else {
+                    break;
+                } 
+            }
+        }
+    }
 }
