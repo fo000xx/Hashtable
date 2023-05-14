@@ -66,9 +66,11 @@ std::string HashTable::deleteKey(int key)
         if (currentNode->mKey == key) {
             if (previousNode == nullptr) {
                 node = std::move(currentNode->mNextNode);
+                delete currentNode;
             }
             else {
-            previousNode->mNextNode = std::move(currentNode->mNextNode);
+                previousNode->mNextNode = std::move(currentNode->mNextNode);
+                delete currentNode;
             }
             --mTableCapacity;
             userResponse = "Key/Value deleted\n";
